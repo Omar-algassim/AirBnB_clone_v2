@@ -10,7 +10,7 @@ from models.city import City
 from models.amenity import Amenity
 from models.place import Place
 from models.review import Review
-from os import environ
+from os import getenv
 
 class DBStorage:
     """This class manages storage of hbnb models in JSON format"""
@@ -18,11 +18,11 @@ class DBStorage:
     __session = None
 
     def __init__(self):
-        user = environ['HBNB_MYSQL_USER']
-        passwd = environ['HBNB_MYSQL_PWD']
-        host = environ['HBNB_MYSQL_HOST']
-        db = environ['HBNB_MYSQL_DB']
-        env = environ['HBNB_ENV']
+        user = getenv('HBNB_MYSQL_USER')
+        passwd = getenv('HBNB_MYSQL_PWD')
+        host = getenv('HBNB_MYSQL_HOST')
+        db = getenv('HBNB_MYSQL_DB')
+        env = getenv('HBNB_ENV')
 
         url = f"mysql+mysqldb://{user}:{passwd}@{host}/{db}"
         self.__engine = create_engine(url, pool_pre_ping=True)
