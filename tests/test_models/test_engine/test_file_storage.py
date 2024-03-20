@@ -9,6 +9,8 @@ import os
 class test_fileStorage(unittest.TestCase):
     """ Class to test the file storage method """
 
+    @unittest.skipIf(os.getenv('HBNB_TYPE_STORAGE') == 'db',
+                     'Accessing filestorage while the engine is db')
     def setUp(self):
         """ Set up test environment """
         del_list = []
@@ -86,6 +88,8 @@ class test_fileStorage(unittest.TestCase):
         new.save()
         self.assertTrue(os.path.exists('file.json'))
 
+    @unittest.skipIf(os.getenv('HBNB_TYPE_STORAGE') == 'db',
+                     'Accessing filestorage while the engine is db')
     def test_type_path(self):
         """ Confirm __file_path is string """
         self.assertEqual(type(storage._FileStorage__file_path), str)
