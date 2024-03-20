@@ -12,6 +12,7 @@ from models.place import Place
 from models.review import Review
 from os import getenv
 
+
 class DBStorage:
     """This class manages storage of hbnb models in JSON format"""
     __engine = None
@@ -64,4 +65,3 @@ class DBStorage:
         """
         if obj is not None:
             self.__session.delete(obj)
-

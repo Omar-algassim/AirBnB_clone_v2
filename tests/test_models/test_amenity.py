@@ -5,6 +5,7 @@ from models.amenity import Amenity
 from sqlalchemy import inspect
 from sqlalchemy.sql import sqltypes
 
+
 class test_Amenity(test_basemodel):
     """ """
 

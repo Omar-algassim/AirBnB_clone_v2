@@ -47,7 +47,7 @@ class test_basemodel(unittest.TestCase):
             new = BaseModel(**copy)
 
     @unittest.skipIf(os.getenv('HBNB_TYPE_STORAGE') == 'db',
-                     'BaseModel not suppurt database model')
+                     'BaseModel not support database model')
     def test_save(self):
         """ Testing save """
         i = self.value()
@@ -93,7 +93,7 @@ class test_basemodel(unittest.TestCase):
     def test_updated_at(self):
         """ """
         new = self.value()
-        self.assertEqual(type(new.updated_at), datetime.datetime)
+        self.assertEqual(type(new.created_at), datetime.datetime)
         n = new.to_dict()
-        new = BaseModel(**n)
+        new = self.value(**n)
         self.assertTrue(new.created_at == new.updated_at)

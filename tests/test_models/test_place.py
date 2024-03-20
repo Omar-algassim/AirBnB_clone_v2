@@ -42,13 +42,13 @@ class test_Place(test_basemodel):
     def test_number_rooms(self):
         """ """
         new = self.value()
-        info = self.inspector.columns['rooms']
+        info = self.inspector.columns['number_rooms']
         self.assertEqual(type(info.type), sqltypes.Integer)
 
     def test_number_bathrooms(self):
         """ """
         new = self.value()
-        info = self.inspector.columns['bathrooms']
+        info = self.inspector.columns['number_bathrooms']
         self.assertEqual(type(info.type), sqltypes.Integer)
 
     def test_max_guest(self):

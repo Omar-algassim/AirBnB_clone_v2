@@ -134,9 +134,9 @@ class HBNBCommand(cmd.Cmd):
             value = parm.group(2)
             if value[0] == '"' and value[-1] == '"':
                 string = value[1:-1]
-                string = string.replace('_', ' ' )
-                string = string.replace('\\"' ,'"')
-                setattr(new_instance, key_name, string)    
+                string = string.replace('_', ' ')
+                string = string.replace('\\"', '"')
+                setattr(new_instance, key_name, string)
             else:
                 try:
                     int_value = int(value)
@@ -148,7 +148,7 @@ class HBNBCommand(cmd.Cmd):
                     except ValueError:
                         pass
             i += 1
-            
+
         storage.new(new_instance)
         print(new_instance.id)
         storage.save()
@@ -214,7 +214,7 @@ class HBNBCommand(cmd.Cmd):
         key = c_name + "." + c_id
 
         try:
-            del(storage.all()[key])
+            del (storage.all()[key])
             storage.save()
         except KeyError:
             print("** no instance found **")
@@ -346,6 +346,7 @@ class HBNBCommand(cmd.Cmd):
         """ Help information for the update class """
         print("Updates an object with new information")
         print("Usage: update <className> <id> <attName> <attVal>\n")
+
 
 if __name__ == "__main__":
     HBNBCommand().cmdloop()
