@@ -9,4 +9,4 @@ from sqlalchemy.orm import relationship
 class Amenity(BaseModel, Base):
     """ amenity class with name of amenity and relation with place"""
     __tablename__ = "amenities"
-    name = Column(String(128), nullable=False), viewonly=False)
+    name = Column(String(128), nullable=False)
