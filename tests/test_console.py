@@ -30,8 +30,8 @@ class test_create_command(unittest.TestCase):
             os.rename("file.json", "tmp")
         except IOError:
             pass
-        if (type(storage) is FileStorage)
-            FileStorage.__objects = {}
+        if (type(storage) is FileStorage):
+                FileStorage.__objects = {}
 
     @classmethod
     def tearDown(self):
@@ -63,11 +63,11 @@ class test_create_command(unittest.TestCase):
     @unittest.skipIf(os.getenv('HBNB_TYPE_STORAGE') == 'db',
                      'BaseModel not support database model')
     def test_create_invalid_syntax(self):
-        correct = "***Unknown syntax: MyModel.create()"
+        correct = "*** Unknown syntax: MyModel.create()"
         with patch("sys.stdout", new=StringIO()) as foutput:
             self.assertFalse(HBNBCommand().onecmd("MyModel.create()"))
             self.assertEqual(correct, foutput.getvalue().strip())
-        correct = "***Unknown syntax: BaseModel.create()"
+        correct = "*** Unknown syntax: BaseModel.create()"
         with patch("sys.stdout", new=StringIO()) as foutput:
             self.assertFalse(HBNBCommand().onecmd("BaseModel.create()"))
             self.assertEqual(correct, foutput.getvalue().strip())
