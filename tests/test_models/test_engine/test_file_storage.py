@@ -1,6 +1,7 @@
 #!/usr/bin/python3
 """ Module for testing file storage"""
 import unittest
+import pycodestyle
 from models.base_model import BaseModel
 from models import storage
 import os
@@ -110,3 +111,22 @@ class test_fileStorage(unittest.TestCase):
         """ FileStorage object storage created """
         from models.engine.file_storage import FileStorage
         self.assertEqual(type(storage), FileStorage)
+    
+    def test_pycode_style(self):
+        style = pycodestyle.StyleGuide(quit=True)
+        p = style.check_files(['models/engine/file_storage.py'])
+        self.assertEqual(p.total_errors, 0, 'PEP8 should be fixed')
+
+    def test_FileStorage_docs(self):
+        from models.engine.file_storage import FileStorage
+        self.assertIsNotNone(FileStorage.__doc__)
+        self.assertIsNotNone(FileStorage.__init__.__doc__)
+        self.assertIsNotNone(FileStorage.all.__doc__)
+        self.assertIsNotNone(FileStorage.new.__doc__)
+        self.assertIsNotNone(FileStorage.save.__doc__)
+        self.assertIsNotNone(FileStorage.delete.__doc__)
+        self.assertIsNotNone(FileStorage.reload.__doc__)
+
+
+if __name__ == "__main__":
+    unittest.main()

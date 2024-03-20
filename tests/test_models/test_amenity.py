@@ -21,3 +21,7 @@ class test_Amenity(test_basemodel):
         info = self.inspector.columns['name']
         new = self.value()
         self.assertEqual(type(info.type), sqltypes.String)
+
+
+if __name__ == "__main__":
+    unittest.main()
