@@ -11,6 +11,7 @@ Unittest classes:
     TestHBNBCommand_destroy
     TestHBNBCommand_update
 """
+import pycodestyle
 import os
 import sys
 import unittest
@@ -44,24 +45,18 @@ class test_create_command(unittest.TestCase):
         except IOError:
             pass
 
-    @unittest.skipIf(os.getenv('HBNB_TYPE_STORAGE') == 'db',
-                     'BaseModel not support database model')
     def test_create_missing_class(self):
         correct = "** class name missing **"
         with patch("sys.stdout", new=StringIO()) as foutput:
             self.assertFalse(HBNBCommand().onecmd("create"))
             self.assertEqual(correct, foutput.getvalue().strip())
 
-    @unittest.skipIf(os.getenv('HBNB_TYPE_STORAGE') == 'db',
-                     'BaseModel not support database model')
     def test_create_invalid_class(self):
         correct = "** class doesn't exist **"
         with patch("sys.stdout", new=StringIO()) as foutput:
             self.assertFalse(HBNBCommand().onecmd("create MyModel"))
             self.assertEqual(correct, foutput.getvalue().strip())
 
-    @unittest.skipIf(os.getenv('HBNB_TYPE_STORAGE') == 'db',
-                     'BaseModel not support database model')
     def test_create_invalid_syntax(self):
         correct = "*** Unknown syntax: MyModel.create()"
         with patch("sys.stdout", new=StringIO()) as foutput:
@@ -73,7 +68,7 @@ class test_create_command(unittest.TestCase):
             self.assertEqual(correct, foutput.getvalue().strip())
 
     @unittest.skipIf(os.getenv('HBNB_TYPE_STORAGE') == 'db',
-                     'BaseModel not support database model')
+                     'Accessing filestorage while the engine is db')
     def test_create_object(self):
         with patch("sys.stdout", new=StringIO()) as foutput:
             self.assertFalse(HBNBCommand().onecmd("create BaseModel"))
@@ -110,3 +105,23 @@ class test_create_command(unittest.TestCase):
             self.assertLess(0, len(foutput.getvalue().strip()))
             testKey = "Review.{}".format(foutput.getvalue().strip())
             self.assertIn(testKey, storage.all().keys())
+
+        def test_pycode_style(self):
+            style = pycodestyle.StyleGuide(quiet=True)
+            p = style.check_files(['console.py'])
+            self.assertEqual(p.total_errors, 0, 'PEP8 should be fixed')
+
+        def test_console_docs(self):
+            self.assertIsNotNone(HBNBCommand.__doc__)
+            self.assertIsNotNone(HBNBCommand.do_all.__doc__)
+            self.assertIsNotNone(HBNBCommand.do_create.__doc__)
+            self.assertIsNotNone(HBNBCommand.do_destroy.__doc__)
+            self.assertIsNotNone(HBNBCommand.do_quit__doc__)
+            self.assertIsNotNone(HBNBCommand.do_EOF.__doc__)
+            self.assertIsNotNone(HBNBCommand.do_count.__doc__)
+            self.assertIsNotNone(HBNBCommand.do_update.__doc__)
+            self.assertIsNotNone(HBNBCommand.do_emptyline.__doc__)
+
+
+        if __name__ == "__main__":
+            unittest.main()
