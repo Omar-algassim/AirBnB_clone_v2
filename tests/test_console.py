@@ -32,7 +32,7 @@ class test_create_command(unittest.TestCase):
         except IOError:
             pass
         if (type(storage) is FileStorage):
-                FileStorage.__objects = {}
+            FileStorage.__objects = {}
 
     @classmethod
     def tearDown(self):
@@ -123,5 +123,5 @@ class test_create_command(unittest.TestCase):
             self.assertIsNotNone(HBNBCommand.do_emptyline.__doc__)
 
 
-        if __name__ == "__main__":
-            unittest.main()
+if __name__ == "__main__":
+    unittest.main()

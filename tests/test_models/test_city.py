@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-""" """
+"""Test the City class"""
 from tests.test_models.test_base_model import test_basemodel
 from models.city import City
 from sqlalchemy.sql import sqltypes
@@ -7,7 +7,7 @@ from sqlalchemy import inspect
 
 
 class test_City(test_basemodel):
-    """ """
+    """A unittest to test the City class """
 
     def __init__(self, *args, **kwargs):
         """ """
@@ -27,3 +27,7 @@ class test_City(test_basemodel):
         new = self.value()
         info = self.inspector.columns['name']
         self.assertEqual(type(info.type), sqltypes.String)
+
+
+if __name__ == "__main__":
+    unittest.main()

@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-""" """
+""" Test the Place class"""
 from tests.test_models.test_base_model import test_basemodel
 from models.place import Place
 from sqlalchemy import inspect
@@ -7,7 +7,7 @@ from sqlalchemy.sql import sqltypes
 
 
 class test_Place(test_basemodel):
-    """ """
+    """A unittest for the Place class"""
 
     def __init__(self, *args, **kwargs):
         """ """
@@ -15,6 +15,7 @@ class test_Place(test_basemodel):
         self.name = "Place"
         self.value = Place
         self.inspector = inspect(Place)
+
     def test_city_id(self):
         """ """
         new = self.value()
@@ -79,3 +80,7 @@ class test_Place(test_basemodel):
         """ """
         new = self.value()
         self.assertEqual(type(new.amenity_ids), list)
+
+
+if __name__ == "__main__":
+    unittest.main()

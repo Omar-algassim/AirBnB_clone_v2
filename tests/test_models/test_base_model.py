@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-""" """
+"""Test the Amenity class """
 from models.base_model import BaseModel
 import unittest
 import datetime
@@ -7,8 +7,9 @@ from uuid import UUID
 import json
 import os
 
+
 class test_basemodel(unittest.TestCase):
-    """ """
+    """A unittest to test the Amenity class """
 
     def __init__(self, *args, **kwargs):
         """ """
@@ -23,7 +24,7 @@ class test_basemodel(unittest.TestCase):
     def tearDown(self):
         try:
             os.remove('file.json')
-        except:
+        except IOError:
             pass
 
     def test_default(self):
@@ -80,6 +81,7 @@ class test_basemodel(unittest.TestCase):
         n = {'Name': 'test'}
         new = self.value(**n)
         self.assertEqual(new.Name, 'test')
+
     def test_id(self):
         """ """
         new = self.value()
@@ -97,7 +99,7 @@ class test_basemodel(unittest.TestCase):
         n = new.to_dict()
         new = self.value(**n)
         self.assertTrue(new.created_at == new.updated_at)
-    
+
 
 if __name__ == "__main__":
     unittest.main()

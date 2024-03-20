@@ -10,7 +10,7 @@ import os
 
 class test_DBStorage(unittest.TestCase):
     """ Class to test the file storage method """
-    
+
     def test_pycode_style(self):
         style = pycodestyle.StyleGuide(quiet=True)
         p = style.check_files(['models/engine/db_storage.py'])
