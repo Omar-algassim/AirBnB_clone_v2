@@ -13,11 +13,7 @@ sudo ln -sf /data/web_static/releases/test/ /data/web_static/current
 sudo chown -R ubuntu /data
 sudo chgrp -R ubuntu /data
 # configure the nginx
-str="location /hbnb_static{
-        alias /data/web_static/current/
-        }"
-echo $str
-sudo sed -i "/listen [::]:80 default_server;/a $str/" /etc/nginx/sites-available/default
+sudo sed -i '24i\\tlocation /hbnb_static/ {\n\t\talias /data/web_static/current/;\n\t}\n' /etc/nginx/sites-enabled/default
 #check if there is any error
 sudo nginx -t
 # restart nginx
