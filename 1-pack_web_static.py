@@ -7,8 +7,11 @@ from fabric.api import local
 from os.path import isdir
 
 
+# env.user = 'ubuntu'
+# env.hosts = ['100.27.0.202 web-01', '54.237.42.237 web-02']
 def do_pack():
     """ buckup the files"""
+    local("ls -l")
     date = datetime.now().strftime("%Y%m%d%H%M%S")
     if not isdir("versions"):
         local("mkdir versions")

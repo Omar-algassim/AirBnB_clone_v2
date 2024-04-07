@@ -2,13 +2,13 @@
 """ full deploying"""
 
 
-
 from datetime import datetime
 from fabric.api import local, run, put, env
 from os.path import isdir, exists
 
 env.user = 'ubuntu'
 env.hosts = ['100.27.0.202', '54.237.42.237']
+
 
 def do_pack():
     """ buckup the files"""
@@ -26,7 +26,7 @@ def do_pack():
 
 def do_deploy(archive_path):
     """ deploy on server web-01 and web-02"""
-    
+
     if exists(archive_path) is False:
         return False
     try:
@@ -36,17 +36,19 @@ def do_deploy(archive_path):
         put(local_path=archive_path, remote_path="/tmp/")
         run(f"mkdir -p /data/web_static/releases/{achive_file_name}")
         run(f"tar -xzf /tmp/{achive_file} -C {path}{achive_file_name}/")
-        run(f"mv {path}{achive_file_name}/web_static/* {path}{achive_file_name}/")
+        run(f"mv {path}{achive_file_name}/web_static/* \
+            {path}{achive_file_name}/")
         run(f"rm -rf {path}{achive_file_name}/web_static")
         run(f"rm -rf /data/web_static/current")
         run(f"ln -s {path}{achive_file_name}/ /data/web_static/current")
         print("New version deployed!")
     except:
         return False
-    
+
+
 def deploy():
     """aceive file and transfer it to server"""
     file = do_pack()
     if file is None:
-        return False    
+        return False
     return do_deploy(file)
