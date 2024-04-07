@@ -44,9 +44,9 @@ def do_deploy(archive_path):
     except:
         return False
     
-    def deploy():
-        """aceive file and transfer it to server"""
-        file = do_pack()
-        if file is None:
-            return False    
-        return do_deploy(file)
+def deploy():
+    """aceive file and transfer it to server"""
+    file = do_pack()
+    if file is None:
+        return False    
+    return do_deploy(file)
