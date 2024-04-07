@@ -5,7 +5,7 @@
 
 from datetime import datetime
 from fabric.api import local, run, put, env
-from os.path import isdir
+from os.path import isdir, exists
 
 
 env.user = 'ubuntu'
