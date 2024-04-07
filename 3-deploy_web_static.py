@@ -7,9 +7,9 @@ from datetime import datetime
 from fabric.api import local, run, put, env
 from os.path import isdir, exists
 
-
 env.user = 'ubuntu'
 env.hosts = ['100.27.0.202', '54.237.42.237']
+
 def do_pack():
     """ buckup the files"""
     local("ls -l")
@@ -46,7 +46,6 @@ def do_deploy(archive_path):
     
     def deploy():
         """aceive file and transfer it to server"""
-        
         file = do_pack()
         if file is None:
             return False    
