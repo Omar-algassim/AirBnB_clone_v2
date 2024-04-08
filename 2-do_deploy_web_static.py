@@ -1,9 +1,9 @@
 #!/usr/bin/python3
 """ achive the file """
 
-
-from fabric.api import env, put, run
-from os.path import exists
+from os.path import exists, isdir
+from datetime import datetime
+from fabric.api import env, put, run, local
 env.user = "ubuntu"
 env.hosts = ['100.27.0.202', '54.237.42.237']
 
@@ -48,7 +48,7 @@ def do_deploy(archive_path):
         result = run(f"rm -rf {path}{achive_file_name}/web_static")
         if result.failed:
             return False
-        result = run(f"rm -rf /data/web_static/current")
+        result = run("rm -rf /data/web_static/current")
         if result.failed:
             return False
         result = run(f"ln -s {path}{achive_file_name}/\
