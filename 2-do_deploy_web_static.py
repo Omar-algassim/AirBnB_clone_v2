@@ -1,61 +1,48 @@
 #!/usr/bin/python3
-""" achive the file """
+# Fabfile to distribute an archive to a web server.
+import os.path
+from fabric.api import env, run, put
 
-from os.path import exists, isdir
-from datetime import datetime
-from fabric.api import env, put, run, local
-env.user = "ubuntu"
+
 env.hosts = ['100.27.0.202', '54.237.42.237']
 
 
-def do_pack():
-    """ buckup the files"""
-    local("ls -l")
-    date = datetime.now().strftime("%Y%m%d%H%M%S")
-    if not isdir("versions"):
-        local("mkdir versions")
-    file_name = "versions/web_static_" + date + ".tgz"
-    try:
-        local(f"tar -cvzf {file_name} web_static")
-        return file_name
-    except Exception:
-        return None
-
-
 def do_deploy(archive_path):
-    """deploy on server web-01 and web-02"""
+    """Distributes an archive to a web server.
 
-    if exists(archive_path) is False:
+    Args:
+        archive_path (str): The path of the archive to distribute.
+    Returns:
+        If the file doesn't exist at archive_path or an error occurs - False.
+        Otherwise - True.
+    """
+    if os.path.isfile(archive_path) is False:
         return False
-    try:
-        achive_file = archive_path.split("/")[-1]
-        achive_file_name = achive_file.split(".")[0]
-        path = "/data/web_static/releases/"
-        result = put(local_path=archive_path, remote_path="/tmp/")
-        if result.failed:
-            return False
-        result = run(f"mkdir -p /data/web_static/releases/{achive_file_name}")
-        if result.failed:
-            return False
-        result = run(f"tar -xzf /tmp/{achive_file} -C \
-            {path}{achive_file_name}/")
-        if result.failed:
-            return False
-        result = run(f"mv {path}{achive_file_name}/web_static/* \
-            {path}{achive_file_name}/")
-        if result.failed:
-            return False
-        result = run(f"rm -rf {path}{achive_file_name}/web_static")
-        if result.failed:
-            return False
-        result = run("rm -rf /data/web_static/current")
-        if result.failed:
-            return False
-        result = run(f"ln -s {path}{achive_file_name}/\
-            /data/web_static/current")
-        if result.failed:
-            return False
-        print("New version deployed!")
-        return True
-    except Exception:
+    file = archive_path.split("/")[-1]
+    name = file.split(".")[0]
+
+    if put(archive_path, "/tmp/{}".format(file)).failed is True:
         return False
+    if run("rm -rf /data/web_static/releases/{}/".
+           format(name)).failed is True:
+        return False
+    if run("mkdir -p /data/web_static/releases/{}/".
+           format(name)).failed is True:
+        return False
+    if run("tar -xzf /tmp/{} -C /data/web_static/releases/{}/".
+           format(file, name)).failed is True:
+        return False
+    if run("rm /tmp/{}".format(file)).failed is True:
+        return False
+    if run("mv /data/web_static/releases/{}/web_static/* "
+           "/data/web_static/releases/{}/".format(name, name)).failed is True:
+        return False
+    if run("rm -rf /data/web_static/releases/{}/web_static".
+           format(name)).failed is True:
+        return False
+    if run("rm -rf /data/web_static/current").failed is True:
+        return False
+    if run("ln -s /data/web_static/releases/{}/ /data/web_static/current".
+           format(name)).failed is True:
+        return False
+    return True
