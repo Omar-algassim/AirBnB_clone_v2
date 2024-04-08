@@ -1,47 +1,68 @@
-# Install Nginx package
-package { 'nginx':
-  ensure => installed,
+# Prepare web server for deployment
+
+exec {'update':
+  provider => shell,
+  command  => 'sudo apt-get -y update',
+  before   => Exec['install nginx'],
 }
 
-# Create necessary directories if they don't exist
-file { ['/data', '/data/web_static', '/data/web_static/releases', '/data/web_static/shared', '/data/web_static/releases/test']:
-  ensure => directory,
+exec {'install nginx':
+  provider => shell,
+  command  => 'sudo apt-get -y install nginx',
+  before   => Exec['start nginx'],
 }
 
-# Create fake HTML file for testing
-file { '/data/web_static/releases/test/index.html':
-  ensure  => present,
-  content => '<html><body>Hello World!.</body></html>',
+exec {'start nginx':
+  provider => shell,
+  command  => 'sudo service nginx start',
+  before   => Exec['create test directory'],
 }
 
-# Create symbolic link (if it exists, remove it first)
-file { '/data/web_static/current':
-  ensure  => link,
-  target  => '/data/web_static/releases/test/',
-  require => File['/data/web_static/releases/test/index.html'],
-  before  => Service['nginx'],
+exec {'create shared directory':
+  provider => shell,
+  command  => 'sudo mkdir -p /data/web_static/shared/',
+  before   => Exec['create test directory'],
 }
 
-# Set ownership of /data/ folder recursively to ubuntu user and group
-file { '/data':
+exec {'create test directory':
+  provider => shell,
+  command  => 'sudo mkdir -p /data/web_static/releases/test/',
+  before   => Exec['add test content'],
+}
+
+exec {'add test content':
+  provider => shell,
+  command  => 'echo "<html>
+    <head>
+    </head>
+    <body>
+      Holberton School
+    </body>
+  </html>" > /data/web_static/releases/test/index.html',
+  before   => Exec['create symbolic link to current'],
+}
+
+exec {'create symbolic link to current':
+  provider => shell,
+  command  => 'sudo ln -sf /data/web_static/releases/test/ /data/web_static/current',
+  before   => File['/data/'],
+}
+
+file {'/data/':
   ensure  => directory,
   owner   => 'ubuntu',
   group   => 'ubuntu',
   recurse => true,
+  before  => Exec['serve current to hbnb_static'],
 }
 
-# Update Nginx configuration to serve content from /data/web_static/current/ to hbnb_static
-file_line { 'add_location_to_nginx_config':
-  ensure  => present,
-  path    => '/etc/nginx/sites-available/default',
-  line    => '        location /hbnb_static { alias /data/web_static/current/; }',
-  require => Package['nginx'],
-  notify  => Service['nginx'],
+exec {'serve current to hbnb_static':
+  provider => shell,
+  command  => 'sed -i "61i\ \n\tlocation /hbnb_static {\n\t\talias /data/web_static/current;\n\t\tautoindex off;\n\t}" /etc/nginx/sites-available/default',
+  before   => Exec['restart nginx'],
 }
 
-# Ensure Nginx is running
-service { 'nginx':
-  ensure    => running,
-  enable    => true,
-  subscribe => File['/etc/nginx/sites-available/default'],
+exec {'restart nginx':
+  provider => shell,
+  command  => 'sudo service nginx restart',
 }
