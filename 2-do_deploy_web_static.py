@@ -7,6 +7,7 @@ from os.path import exists
 env.user = "ubuntu"
 env.hosts = ['100.27.0.202', '54.237.42.237']
 
+
 def do_pack():
     """ buckup the files"""
     local("ls -l")
@@ -17,7 +18,7 @@ def do_pack():
     try:
         local(f"tar -cvzf {file_name} web_static")
         return file_name
-    except:
+    except Exception:
         return None
 
 
@@ -50,10 +51,11 @@ def do_deploy(archive_path):
         result = run(f"rm -rf /data/web_static/current")
         if result.failed:
             return False
-        result = run(f"ln -s {path}{achive_file_name}/ /data/web_static/current")
+        result = run(f"ln -s {path}{achive_file_name}/\
+            /data/web_static/current")
         if result.failed:
             return False
         print("New version deployed!")
         return True
-    except:
+    except Exception:
         return False
