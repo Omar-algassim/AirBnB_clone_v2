@@ -47,6 +47,5 @@ def even_or_odd(n):
     return render_template('6-number_odd_or_even.html', n=n)
 
 
-
 if "__main__" == __name__:
     app.run(port=5000, host="0.0.0.0", debug=True)
